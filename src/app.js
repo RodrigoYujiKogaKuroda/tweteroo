@@ -5,6 +5,8 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
+const tweetQuantity = 11;
+
 let user = [];
 let tweets = [];
 
@@ -23,7 +25,23 @@ server.post("/tweets", (req, res) => {
 });
 
 server.get("/tweets", (req, res) => {
-    console.log(user);
+    let tweetList = [];
+    let tweetUser = {};
+    let tweetListToSend = [];
+    if (tweets.length >= tweetQuantity) {
+        tweetList = tweets.slice(-tweetQuantity);
+    } else {
+        tweetList = tweets.slice(-tweets.length);
+    };
+    tweetList.map(tweet => {
+        tweetUser = user.find(item => item.username === tweet.username);
+        tweetListToSend.push({
+            username: tweet.username,
+            avatar: tweetUser.avatar,
+            tweet: tweet.tweet
+        });
+    });
+    res.send(tweetListToSend);
 });
 
 server.listen(5000, () => console.log("App running in port: 5000"));
