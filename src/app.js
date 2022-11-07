@@ -5,7 +5,7 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
-const tweetQuantity = 11;
+const tweetMaxQuantity = 10;
 
 let user = [];
 let tweets = [];
@@ -21,15 +21,21 @@ server.post("/sign-up", (req, res) => {
 });
 
 server.post("/tweets", (req, res) => {
-    
+    const {username, tweet} = req.body;
+    if (!username || !tweet) {
+        res.status(422).send("ERRO: Não há nenhum tweet...");
+        return;
+    }
+    tweets.push(req.body);
+    res.status(200).send("OK");
 });
 
 server.get("/tweets", (req, res) => {
     let tweetList = [];
     let tweetUser = {};
     let tweetListToSend = [];
-    if (tweets.length >= tweetQuantity) {
-        tweetList = tweets.slice(-tweetQuantity);
+    if (tweets.length >= tweetMaxQuantity) {
+        tweetList = tweets.slice(-tweetMaxQuantity);
     } else {
         tweetList = tweets.slice(-tweets.length);
     };
