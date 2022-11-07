@@ -25,5 +25,6 @@ yarn-error.log*
 # premade-files
 /assets
 /css
+/zip
 index.html
 script.js
